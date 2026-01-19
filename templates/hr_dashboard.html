@@ -1,0 +1,61 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>HR Dashboard</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}" />
+  </head>
+  <body>
+    {% include 'partials/navbar.html' %}
+
+    <div class="dashboard-container">
+      <h2 class="dash-title">HR Dashboard 👔</h2>
+      <p class="dash-subtitle">
+        Manage job descriptions & shortlist candidates
+      </p>
+
+      <div class="dashboard-cards">
+        <!-- Add JD -->
+        <div class="dash-card1">
+          <h3>📝 Add Job Description</h3>
+          <p>Upload or paste job requirements</p>
+          <form method="POST" action="{% url 'add_job' %}">
+            {% csrf_token %}
+            <textarea
+              name="title"
+              placeholder="Job Title..."
+              rows="2"
+              required
+            ></textarea>
+            <textarea
+              name="description"
+              placeholder="Job Description..."
+              rows="6"
+              required
+            ></textarea>
+            <button type="submit" class="dash-btn">Submit JD</button>
+          </form>
+        </div>
+
+        <!-- Shortlisted -->
+        <div class="side-cards">
+          <div class="dash-card">
+            <h3>✅ Shortlisted Candidates</h3>
+            <p>View candidates selected by AI</p>
+            <a href="{% url 'hr_short' %}" class="dash-btn"> View List → </a>
+          </div>
+
+          <!-- Visualization -->
+          <div class="dash-card">
+            <h3>📊 Visualization</h3>
+            <p>
+              Analyze candidate scores, skill distribution and performance
+              insights.
+            </p>
+            <a href="{% url 'analytics' %}" class="dash-btn">View Analytics</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

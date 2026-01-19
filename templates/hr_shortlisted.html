@@ -1,0 +1,61 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Shortlisted Candidates</title>
+  <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+
+<h1 class="page-title">📄 Shortlisted Candidates</h1>
+<p class="page-subtitle">AI-evaluated candidates based on job description</p>
+
+<!-- JOB FILTER -->
+    <form method="GET" action="{% url 'hr_short' %}" class="job-filter">
+
+  <select name="job_id" onchange="this.form.submit()">
+    <option value="">-- Select Job Title --</option>
+    {% for job in jobs %}
+      <option value="{{ job.id }}"
+        {% if job.id|stringformat:"s" == selected_job_id %}selected{% endif %}>
+        {{ job.title }}
+      </option>
+    {% endfor %}
+  </select>
+</form>
+
+<!-- TABLE -->
+<div class="table-card">
+  <table>
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Score</th>
+        <th>Job</th>
+        <th>Result</th>
+      </tr>
+    </thead>
+    <tbody>
+        
+      {% for c in candidates %}
+      <tr>
+        <td>{{ c.name }}</td>
+        <td>{{ c.score }}%</td>
+        <td>{{ c.job__title }}</td>
+        <td>
+          <span class="badge {{ c.status|lower }}">
+            {{ c.status }}
+          </span>
+        </td>
+      </tr>
+      {% empty %}
+      <tr>
+        <td colspan="4">No candidates found</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+</body>
+</html>

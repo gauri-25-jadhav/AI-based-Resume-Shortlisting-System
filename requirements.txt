@@ -1,0 +1,7 @@
+asgiref==3.11.0
+chartjs==1.2
+Django==5.2.10
+mysqlclient==2.2.7
+PyMySQL==1.1.2
+sqlparse==0.5.5
+tzdata==2025.3

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Login Selection</title>
+    <link rel="stylesheet" href="/static/css/style.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+    />
+  </head>
+  <body>
+    <div class="navbar">
+      <h2>AI Resume System</h2>
+      <ul>
+        <li>Candidate</li>
+        <li>HR</li>
+        <li>Help</li>
+      </ul>
+      <i class="fa-solid fa-bars menu-toggle"></i>
+    </div>
+    <div style="margin-top: 100px">
+      <!-- existing page content here -->
+      <div class="page-wrapper">
+        <h2>Select Your Role</h2>
+
+        <div class="card-container">
+          <div class="login-card">
+            <i class="fa-solid fa-user-graduate icon"></i>
+            <h3>Candidate</h3>
+            <a href="{% url 'candidate_login' %}" class="card-btn primary">Login</a>
+            <a href="{% url 'candidate_login' %}" class="card-btn secondary">Register</a>
+          </div>
+          
+          <div class="login-card">
+            <i class="fa-solid fa-user-tie icon"></i>
+            <h3>HR</h3>
+            <a href="{% url 'hr_login' %}" class="card-btn primary">Login</a>
+            <a href="{% url 'hr_login' %}" class="card-btn secondary">Register</a>
+          </div>
+        </div>
+        
+      </div>
+    </div>
+  </body>
+</html>

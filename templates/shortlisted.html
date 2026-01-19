@@ -1,0 +1,58 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Shortlisted Candidates</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}" />
+  </head>
+  <body>
+    {% include 'partials/navbar.html' %}
+
+    <div class="page-container">
+      <h2>📋 Shortlisted Candidates</h2>
+      <p class="subtitle">AI-evaluated candidates based on job description</p>
+
+      <div class="table-card">
+        <table class="styled-table">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Score</th>
+              <th>Extracted Skills</th>
+              <th>Result</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for c in candidates %}
+            <tr>
+              <td>{{ c.name }}</td>
+
+              <td>
+                <span class="score-badge">{{ c.score }}%</span>
+              </td>
+
+              <td>
+                {% for skill in c.skills %}
+                <span class="skill-tag">{{ skill }}</span>
+                {% endfor %}
+              </td>
+
+              <td>
+                {% if c.score >= 70 %}
+                <span class="status shortlisted">Shortlisted</span>
+                {% else %}
+                <span class="status rejected">Rejected</span>
+                {% endif %}
+              </td>
+            </tr>
+            {% empty %}
+            <tr>
+              <td colspan="4">No candidates found</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </body>
+</html>

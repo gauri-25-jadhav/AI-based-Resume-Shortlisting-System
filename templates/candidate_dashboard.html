@@ -1,0 +1,98 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Candidate Dashboard</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}" />
+  </head>
+  <body>
+    {% include 'partials/navbar.html' %}
+
+    <div class="dashboard-container">
+      <h2 class="dash-title">Welcome, Candidate 👋</h2>
+      <p class="dash-subtitle">Upload your resume & check results</p>
+      {% if error %}
+      <p style="color: red; font-weight: bold">⚠ {{ error }}</p>
+      {% endif %}
+
+      <div class="dashboard-cards">
+        <!-- Upload Resume -->
+        <div class="dash-card1">
+          <h3 class="dash-title">📄 Upload Resume</h3>
+          <p class="dash-title">Upload your resume to get AI-based score</p>
+          <form
+            class="upload-form"
+            method="POST"
+            action="{% url 'upload_resume' %}"
+            enctype="multipart/form-data"
+          >
+            {% csrf_token %}
+
+            <div class="form-group">
+              <label>Full Name</label>
+              <input
+                type="text"
+                name="name"
+                placeholder="Enter full name"
+                required
+              />
+            </div>
+
+            <div class="form-group">
+              <label>Email Address</label>
+              <input 
+                type="email"
+                name="email"
+                placeholder="Enter emailID"
+                require
+              />
+            </div>
+
+            <div class="form-group">
+              <label>Phone Number</label>
+              <input
+                type="text"
+                name="number"
+                placeholder="Enter valid num"
+                require
+              />
+            </div>
+
+            <div class="form-group file-box">
+              <label>Upload Resume (PDF)</label>
+              <input type="file" name="resume" required />
+            </div>
+
+            <button type="submit" class="submit-btn">
+              🚀 Submit for Screening
+            </button>
+          </form>
+        </div>
+
+        <!-- Result -->
+        <div class="dash-card">
+          <h3>📊 Resume Result</h3>
+          <br>
+
+          {% if candidate %}
+          <p>Your resume has been evaluated</p>
+          <br>
+          <a href="{% url 'resume_result' candidate.id %}" class="btn">
+            <span class="status-badge shortlisted">📊 View Result</span>
+          </a>
+          {% else %}
+          <p>⚠ Please submit resume first</p>
+          {% endif %}
+        </div>
+
+        <!-- Status -->
+        <div class="dash-card">
+          <h3>📌 Application Status</h3>
+          <br>
+          <span class="status-badge shortlisted">Shortlisted</span>
+          <!-- change class to "rejected" if needed -->
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

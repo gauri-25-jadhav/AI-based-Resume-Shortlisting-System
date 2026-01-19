@@ -1,0 +1,105 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Resume Screening Result</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}" />
+  </head>
+  <body>
+    <!-- ===== HEADER SECTION (OUTSIDE CARD) ===== -->
+    <div class="result-header">
+      <h1 class="result-heading">---RESUME SCREENING RESULT---</h1>
+
+      <!-- Job Selector -->
+      <form
+        method="GET"
+        action="{% url 'resume_result' candidate.id %}"
+        class="job-select-form"
+        enctype="multipart/form-data"
+      >
+        {% csrf_token %}
+
+        <label for="job">Select Job Title</label>
+
+        <select name="job_id" id="job" onchange="this.form.submit()">
+          <option value="">-- Choose Job --</option>
+
+          {% for job in jobs %}
+          <option value="{{ job.id }}"
+          {% if selected_job and job.id == selected_job.id %}selected{% endif %}>
+          {{ job.title }}
+        </option>
+      {% endfor %}
+        </select>
+      </form>
+      <!-- Greeting -->
+      <p class="greeting">Dear <strong>{{ candidate.name }}</strong>,</p>
+
+      {% if selected_job %}
+      <p class="job-line">
+        Below is your screening result for the position of
+        <strong>{{ selected_job.title }}</strong>.
+      </p>
+      {% else %}
+      <p class="job-line muted">
+        Please select a job title to view detailed results.
+      </p>
+      {% endif %}
+      <!-- ===== MAIN RESULT CARD ===== -->
+      {% if selected_job %}
+      <div class="result-container">
+        <!-- SCORE -->
+        <div class="score-box">
+          <div class="progress">
+            <h3>ATS Match Score</h3>
+            <div class="progress-bar" style="width: {{ score|default:0 }}%">
+              <strong>{{ score }}%</strong>
+            </div>
+          </div>
+          
+          {% if status == "Shortlisted" %}
+          <p class="decision success">
+            🎉 Congratulations! Your profile meets the role requirements.
+            <br>
+          </p>
+          {% else %}
+          <p class="decision rejected">
+            ❌ Your profile does not meet the current role requirements.
+          </p>
+          {% endif %}
+        </div>
+        
+        <!-- SKILLS -->
+        <br>
+        <div class="skills-box">
+          
+          <h3>Skills Identified from Your Resume</h3>
+          <div class="skills">
+            {% for skill in skills %}
+            <span class="skill-tag">{{ skill }}</span>
+            {% empty %}
+            <span class="muted">No matching skills found</span>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+
+      <!-- STATUS -->
+      <div class="status-box">
+        <br>
+        <h3>Application Status</h3>
+        <br>
+        {% if status == "Shortlisted" %}
+        <span class="status shortlisted" >Shortlisted ✅</span>
+        <br>
+        {% else %}
+        <span class="status rejected">Rejected ❌</span>
+        <br>
+        {% endif %}
+        <br>
+      </div>
+    </div>
+    {% endif %}
+  </body> 
+</html> 
+ 

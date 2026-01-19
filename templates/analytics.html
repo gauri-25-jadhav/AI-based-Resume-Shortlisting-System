@@ -1,0 +1,148 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Recruitment Analytics</title>
+  <link rel="stylesheet" href="{% static 'css/style.css' %}">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body>
+{% include 'partials/navbar.html' %}
+
+<div class="analytics-container">
+
+  <h2 class="page-title">📊 Recruitment Analytics</h2>
+
+  <!-- JOB DROPDOWN -->
+  <form method="GET" class="job-filter">
+    <select name="job_id" onchange="this.form.submit()">
+      <option value="">All Jobs</option>
+      {% for job in jobs %}
+        <option value="{{ job.id }}"
+          {% if job.id|stringformat:"s" == selected_job_id %}selected{% endif %}>
+          {{ job.title }}
+        </option>
+      {% endfor %}
+    </select>
+  </form>
+
+  <!-- CHARTS -->
+  <div class="cards">
+
+    <!-- SCORE DISTRIBUTION -->
+    <div class="card">
+      <h3>Job-wise Applications</h3>
+      <canvas id="jobChart"></canvas>
+      
+
+<script>
+const jobChart = new Chart(document.getElementById("jobChart"), {
+  type: "bar",
+  data: {
+    labels: {{ job_labels|safe }},
+    datasets: [{
+      label: "Candidates Applied",
+      data: {{ job_values|safe }},
+      borderRadius: 10
+    }]
+  },
+  options: {
+    onClick: (evt, elements) => {
+      if (elements.length > 0) {
+        const index = elements[0].index;
+        const jobTitle = jobChart.data.labels[index];
+        window.location.href = "?job_id=" + index;
+      }
+    },
+    scales: {
+      y: { beginAtZero: true }
+    }
+  }
+});
+</script>
+
+    </div>
+
+    <!-- TOP SKILLS -->
+    <div class="card">
+      <h3>Top Skills (Shortlisted)</h3>
+      {% if skill_labels %}
+    <canvas id="skillsChart"></canvas>
+  {% else %}
+  <br>
+    <p class="muted">No shortlisted candidates for this job</p>
+  {% endif %}
+
+  
+  <script>
+    {% if skill_labels %}
+    new Chart(document.getElementById("skillsChart"), {
+      type: "doughnut",
+      data: {
+        labels: {{ skill_labels|safe }},
+        datasets: [{
+          data: {{ skill_values|safe }},
+          backgroundColor: [
+            "#22c55e",
+            "#3b82f6",
+            "#f97316",
+            "#e11d48",
+            "#8b5cf6"
+          ]
+        }]
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          legend: {
+            position: "bottom"
+          }
+        }
+      }
+    });
+    {% endif %}
+    </script>
+    
+
+    </div>
+
+  </div>
+
+  <!-- CANDIDATE TABLE -->
+  <div class="table-section">
+    <h3>Candidate Overview</h3>
+
+    <table class="styled-table">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Score</th>
+          <th>Extracted Skills</th>
+        </tr>
+      </thead>
+      <tbody>
+       {% for c in candidates %}
+       <tr>
+         <td>{{ c.name }}</td>
+         <td>{{ c.score }}%</td>
+         <td>
+           {% for skill in c.skills_list %}
+             <span class="skill-badge">{{ skill }}</span>
+           {% empty %}
+             <span class="muted">No skills</span>
+           {% endfor %}
+         </td>
+       </tr>
+       {% empty %}
+       <tr>
+         <td colspan="3">No data available</td>
+       </tr>
+       {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+</div>
+</body>
+</html>

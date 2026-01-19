@@ -1,0 +1,47 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>HR Analytics</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+
+{% include 'partials/navbar.html' %}
+
+<div class="dashboard-container">
+
+    <h2 class="dash-title">📊 Resume Analytics</h2>
+    <p class="dash-subtitle">AI-based candidate evaluation overview</p>
+
+    <div class="dashboard-cards">
+
+        <div class="dash-card">
+            <h3>📈 Candidate Scores</h3>
+            <img src="{% static 'images/chart_placeholder.png' %}" 
+                 alt="Score Chart" class="chart-img">
+            <p>Skill match score comparison</p>
+        </div>
+
+        <div class="dash-card">
+            <h3>🧠 Skill Match</h3>
+            <img src="{% static 'images/chart_placeholder.png' %}" 
+                 alt="Skill Chart" class="chart-img">
+            <p>JD vs Resume skills</p>
+        </div>
+
+        <div class="dash-card">
+            <h3>📋 Summary</h3>
+            <ul class="summary-list">
+                <li>Total Resumes: <b>25</b></li>
+                <li>Shortlisted: <b>8</b></li>
+                <li>Rejected: <b>17</b></li>
+            </ul>
+        </div>
+
+    </div>
+
+</div>
+
+</body>
+</html>
